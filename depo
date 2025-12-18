@@ -755,8 +755,17 @@ end
                                     if key == extra_value.Key then
                                         if extra_value.Type == "Toggle" then
                                             extra_value.Active = not extra_value.Active
+                                            -- Also toggle the parent toggle element
+                                            element:set_value({Toggle = not value.Toggle})
                                         elseif extra_value.Type == "Hold" then
                                             extra_value.Active = true
+                                            -- Turn on the parent toggle
+                                            if not value.Toggle then
+                                                element:set_value({Toggle = true})
+                                            end
+                                        elseif extra_value.Type == "Always" then
+                                            -- Toggle the parent toggle
+                                            element:set_value({Toggle = not value.Toggle})
                                         end
                                         key_callback(extra_value)
                                         menu.values[tab.tab_num][section_name][sector_name][extra_flag] = extra_value
@@ -769,6 +778,10 @@ end
                                     if key == extra_value.Key then
                                         if extra_value.Type == "Hold" then
                                             extra_value.Active = false
+                                            -- Turn off the parent toggle
+                                            if value.Toggle then
+                                                element:set_value({Toggle = false})
+                                            end
                                             key_callback(extra_value)
                                             menu.values[tab.tab_num][section_name][sector_name][extra_flag] = extra_value
                                         end
