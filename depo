@@ -1869,6 +1869,26 @@ end
                             end
                         end
 
+                        function element:remove_value(v)
+                            local btn = ScrollFrame:FindFirstChild(v)
+                            if not btn then return end
+                            
+                            btn:Destroy()
+                            ScrollFrame.CanvasSize = ScrollFrame.CanvasSize - UDim2.new(0, 0, 0, 20)
+                            
+                            -- If we removed the currently selected item, select first available
+                            if value.Scroll == v then
+                                for _, child in next, ScrollFrame:GetChildren() do
+                                    if child:IsA("TextButton") then
+                                        value.Scroll = child.Name
+                                        child.Decoration.Visible = true
+                                        child.ButtonText.TextColor3 = Color3.fromRGB(255, 255, 255)
+                                        break
+                                    end
+                                end
+                            end
+                        end
+
                         function element:set_value(new_value, cb)
                             value = new_value or value
 
